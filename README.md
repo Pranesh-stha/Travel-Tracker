@@ -68,9 +68,9 @@ Make sure you have the following installed:
 
 5. The `user_visited_countries` table must include:
    
-  * `user_id` (foreign key referencing `users.id`)
-  * `country_id` (foreign key referencing `countries.id`)
-  * A **composite primary key** on (`user_id`, `country_id`) so the same user can’t add the same country twice
+    * `user_id` (foreign key referencing `users.id`)
+    * `country_id` (foreign key referencing `countries.id`)
+    * A **composite primary key** on (`user_id`, `country_id`) so the same user can’t add the same country twice
 
 
 👉 The backend links users and countries using:
