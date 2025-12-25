@@ -1,0 +1,518 @@
+/* =========================
+   Global Variables
+========================= */
+:root {
+  /* Fonts */
+  --font-main: "Roboto", sans-serif;
+
+  /* Base colors */
+  --color-bg-main: #21252b;
+  --color-bg-panel: #2c313a;
+  --color-bg-item: #383d46;
+  --color-bg-item-hover: #434952;
+
+  --color-text-main: #d3ddef;
+  --color-text-muted: #9ca3af;
+  --color-white: #ffffff;
+
+  /* Primary (Deep Teal) */
+  --color-primary: #2a8f8a;
+  --color-primary-hover: #247b77;
+
+  /* Secondary (Muted Violet) */
+  --color-secondary: #6b5ca5;
+  --color-secondary-hover: #5b4d8f;
+
+  /* Borders */
+  --color-border-default: #4a5568;
+  --color-border-dark: #21252b;
+
+  /* Danger (kept subtle) */
+  --color-danger: #7a2d2d;
+  --color-danger-hover: #612323;
+
+  /* Shadows */
+  --shadow-panel: -2px 0 10px rgba(0, 0, 0, 0.35);
+  --shadow-primary: 0 0 10px rgba(42, 143, 138, 0.35);
+  --shadow-secondary: 0 0 10px rgba(107, 92, 165, 0.35);
+  --shadow-danger: 0 0 8px rgba(122, 45, 45, 0.35);
+
+  /* Effects */
+  --transition-default: all 0.3s ease;
+
+  /* Map hover glow */
+  --map-hover-fill: #3fbfb8; /* brighter teal, not neon */
+  --map-hover-stroke: #6fe7dd;
+  --map-hover-glow: drop-shadow(0 0 4px rgba(63, 191, 184, 0.6))
+    drop-shadow(0 0 10px rgba(63, 191, 184, 0.4))
+    drop-shadow(0 0 18px rgba(63, 191, 184, 0.25));
+
+  /* Map active (selected, calm) */
+  --map-active-fill: #2a8f8a; /* same family as primary */
+  --map-active-stroke: #3fbfb8; /* subtle outline */
+}
+
+/* =========================
+   Reset / Base
+========================= */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: var(--font-main);
+  display: flex;
+}
+
+/* =========================
+   Layout
+========================= */
+.map-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.right-panel {
+  width: 350px;
+  background: var(--color-bg-panel);
+  padding: 2rem;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-panel);
+
+  height: 100vh; /* <-- key */
+  overflow: hidden; /* <-- key (remove overflow-y:auto) */
+}
+
+/* =========================
+   SVG Map
+========================= */
+.ag-canvas_svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.ag-canvas_svg path {
+  fill: var(--color-bg-item);
+  fill-opacity: 1;
+  stroke: var(--color-border-dark);
+  stroke-opacity: 1;
+  stroke-width: 0.5;
+  transition: var(--transition-default);
+  cursor: pointer;
+  transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+}
+
+.ag-canvas_svg path:hover {
+  fill: var(--map-hover-fill);
+  stroke: var(--map-hover-stroke);
+  stroke-width: 0.8;
+  fill-opacity: 1;
+  filter: var(--map-hover-glow);
+  transform: translateZ(0);
+}
+
+/* Active country (selected) — NO glow */
+.ag-canvas_svg path.is-active {
+  fill: var(--map-active-fill);
+  stroke: var(--map-active-stroke);
+  stroke-width: 0.8;
+  fill-opacity: 1;
+  filter: none;
+}
+
+/* Active + hover → glow allowed */
+.ag-canvas_svg path.is-active:hover {
+  fill: var(--map-hover-fill);
+  stroke: var(--map-hover-stroke);
+  filter: var(--map-hover-glow);
+}
+
+/* =========================
+   Panel Header
+========================= */
+.panel-header {
+  margin-bottom: 2rem;
+}
+
+.panel-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.panel-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   Inputs
+========================= */
+.input-section {
+  margin-bottom: 2rem;
+}
+
+input {
+  font-family: var(--font-main);
+  outline: 0;
+  background: var(--color-bg-item);
+  width: 100%;
+  border: 2px solid var(--color-border-default);
+  margin: 0 0 15px;
+  padding: 12px 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: var(--color-text-main);
+  border-radius: 6px;
+  transition: var(--transition-default);
+}
+
+input:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg-item-hover);
+}
+
+input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   Buttons
+========================= */
+button {
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  outline: 0;
+  background: var(--color-primary);
+  width: 100%;
+  border: 0;
+  padding: 12px 15px;
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: var(--transition-default);
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   Country List
+========================= */
+.country-list-section {
+  flex: 1;
+  min-height: 0; /* <-- important for flex + scroll */
+  overflow-y: auto; /* <-- scroll happens here */
+  padding-bottom: 1rem; /* little breathing room above login */
+}
+
+.country-list-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  color: var(--color-text-main);
+}
+
+.country-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.country-item {
+  background: var(--color-bg-item);
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-default);
+}
+
+.country-item:hover {
+  background: var(--color-bg-item-hover);
+  transform: translateX(-2px);
+}
+
+.country-name {
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+}
+
+/* =========================
+   Remove Button
+========================= */
+.remove-btn {
+  background: var(--color-bg-item);
+  color: var(--color-text-main);
+  padding: 6px 12px;
+  font-size: 12px;
+  width: auto;
+  border-radius: 4px;
+  border: 1px solid var(--color-secondary);
+  transition: var(--transition-default);
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: var(--color-secondary);
+  box-shadow: var(--shadow-secondary);
+}
+
+/* =========================
+   Empty State + Count
+========================= */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.country-count {
+  background: var(--color-secondary);
+  color: var(--color-white);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media screen and (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  .map-container {
+    height: 50vh;
+    padding: 1rem;
+  }
+
+  .right-panel {
+    width: 100%;
+    height: 50vh;
+  }
+}
+
+/* =========================
+   Login Section
+========================= */
+.login-section {
+  margin-top: auto; /* pushes it to the bottom */
+  padding: 14px 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.login-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.login-text {
+  color: var(--color-primary);
+  font-size: 1.15rem; /* bigger (room for username later) */
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.login-text:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.logout-btn {
+  width: auto;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-main);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-primary);
+}
+
+/* =========================
+   Responsive (Panel)
+========================= */
+@media screen and (max-width: 768px) {
+  .right-panel {
+    width: 100%;
+    height: 50vh;
+    overflow: hidden; /* keep panel fixed */
+  }
+
+  .country-list-section {
+    overflow-y: auto;
+    min-height: 0;
+  }
+}
+
+/* =========================
+   Root + App Layout
+========================= */
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+
+/* Root full-screen wrapper */
+.tt-login-root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Card */
+.tt-login-container {
+  background: #1a2332;
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #2a3a4d;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Title */
+.tt-login-title {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* Form */
+.tt-login-form {
+  width: 100%;
+}
+
+/* Input group */
+.tt-login-group {
+  margin-bottom: 20px;
+}
+
+/* Label */
+.tt-login-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a8b8c8;
+}
+
+/* Inputs */
+.tt-login-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: #0f1419;
+  border: 1px solid #2a3a4d;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.tt-login-input::placeholder {
+  color: #6a7a8a;
+}
+
+.tt-login-input:focus {
+  outline: none;
+  border-color: #20c997;
+  box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.12);
+}
+
+/* Error message (always visible as requested) */
+.tt-login-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #ff4757;
+}
+
+/* Button */
+.tt-login-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background: #20c997;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tt-login-button:hover {
+  background: #1aa179;
+  box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
+}
+
+.tt-login-button:active {
+  transform: scale(0.98);
+}
+
