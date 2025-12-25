@@ -2,15 +2,14 @@ import React from "react";
 import Header from "./Header";
 import Login from "./Login";
 
-function Panel( {onLogout, username} ) {
-  const[userInput, setUserInput] = React.useState("")
-  function handleChange(event){
-    setUserInput(event.target.value)
-    
+function Panel({ onLogout, username, fullNames }) {
+  const [userInput, setUserInput] = React.useState("");
+  function handleChange(event) {
+    setUserInput(event.target.value);
   }
 
-  function handleClick(){
-    console.log(userInput)
+  function handleClick() {
+    console.log(userInput);
   }
 
   return (
@@ -26,7 +25,9 @@ function Panel( {onLogout, username} ) {
           value={userInput}
           onChange={handleChange}
         />
-        <button type="submit" onClick={handleClick}>Add Country</button>
+        <button type="submit" onClick={handleClick}>
+          Add Country
+        </button>
       </div>
 
       <div className="country-list-section">
@@ -35,14 +36,20 @@ function Panel( {onLogout, username} ) {
           <span className="country-count">1</span>
         </h2>
         <ul className="country-list">
-          <li className="country-item">
-            <span className="country-name">France</span>
-            <button className="remove-btn">Remove</button>
-          </li>
+          {fullNames.length === 0 ? (
+            <li className="empty">No countries added yet</li>
+          ) : (
+            fullNames.map((country, index) => (
+              <li className="country-item" key={index}>
+                <span className="country-name">{country}</span>
+                <button className="remove-btn">Remove</button>
+              </li>
+            ))
+          )}
         </ul>
       </div>
 
-      <Login onLogout={onLogout} username={username}/>
+      <Login onLogout={onLogout} username={username} />
     </div>
   );
 }

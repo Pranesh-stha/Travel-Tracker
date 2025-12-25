@@ -1,17 +1,29 @@
 import React from "react";
+import axios from "axios";
 
-function Map() {
-  const [activeCountryIds, setActiveCountryIds] = React.useState(["FR", "NP", "RU"]);
+function Map({ username, setFullNames}) {
+  const [activeCountryIds, setActiveCountryIds] = React.useState([]);
 
-  function visited(countryId) {
-    setActiveCountryIds(prev => [...prev, countryId]);
+  async function visitedCountries() {
+    console.log(username)
+    const name = {username: username}
+    const response = await axios.post(
+      "http://localhost:5000/countries/visited",
+      name
+    );
+    setFullNames(response.data.map(item => item.name));
+
+
+    console.log(response.data)
+    setActiveCountryIds(response.data.map(item => item.code2));
   }
 
   
-
+  React.useEffect(() => {
+    visitedCountries();
+  }, []);
 
   React.useEffect(() => {
-    visited("BR")
     document
       .querySelectorAll(".ag-canvas_svg path.is-active")
       .forEach((p) => p.classList.remove("is-active"));
@@ -23,7 +35,7 @@ function Map() {
   }, [activeCountryIds]);
 
   return (
-    <div className="map-container">
+    <div className="map-container" onClick={visitedCountries}>
       <svg
         className="ag-canvas_svg"
         xmlns="http://www.w3.org/2000/svg"

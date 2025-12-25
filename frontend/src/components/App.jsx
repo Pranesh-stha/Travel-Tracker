@@ -10,7 +10,7 @@ import Home from "./Home";
 import LoginPage from "./LoginPage";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [curretUser, steCurrentUser] = React.useState("Login")
 
   function handleLogin(loggedInUsername) {
