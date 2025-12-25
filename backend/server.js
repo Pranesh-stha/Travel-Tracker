@@ -22,45 +22,42 @@ db.connect();
 
 let userInfo = [];
 
-db.query("SELECT * FROM users", (err, res) => {
-  if (err) {
-    console.log("Error Executing Message", err.stack);
-  } else {
-    userInfo = res.rows;
-  }
-});
-
-app.get("/users", async (req, res) => {
-  try {
-    res.json(userInfo);
-  } catch (err) {
-    console.error("Error fetching users", err);
-    res.status(500).json([]);
-  }
-});
-
 app.post("/pwcheck", (req, res) => {
-  const response = req.body;
-  const user = userInfo.find((u) => u.username === response.username);
+  const { username, password } = req.body;
 
-  if (!user) {
-    return res.json(false);
-  }
+  db.query(
+    "SELECT password FROM users WHERE username = $1",
+    [username],
+    (err, dbRes) => {
+      if (err) {
+        console.log("DB error:", err.stack);
+        return res.status(500).json(false);
+      }
 
-  if (user.password === response.password) {
-    return res.json(true);
-  }
+      // If user doesn't exist: create and log in
+      if (dbRes.rows.length === 0) {
+        return db.query(
+          "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id",
+          [username, password],
+          (err2) => {
+            if (err2) {
+              console.log("Insert error:", err2.stack);
+              return res.status(500).json(false);
+            }
+            return res.json(true);
+          }
+        );
+      }
 
-  return res.json(false);
+      // User exists, check password
+      const dbPassword = dbRes.rows[0].password;
+      return res.json(dbPassword === password);
+    }
+  );
 });
 
-let currentUser = "";
 
-app.post("/test", (req, res) => {
-  console.log("🔥 TEST ROUTE HIT");
-  console.log("Body:", req.body);
-  res.json({ ok: true });
-});
+
 
 
 
