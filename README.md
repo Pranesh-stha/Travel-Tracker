@@ -61,10 +61,10 @@ Make sure you have the following installed:
    * `code2` (e.g. `NP`)
      
 4. The `users` table must include:
-   
-  * `id` (primary key)
-  * `username`
-  * `password`
+
+    * `id` (primary key)
+    * `username`
+    * `password`
 
 5. The `user_visited_countries` table must include:
    
