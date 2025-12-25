@@ -1,3 +1,4 @@
+
 # 🌍 Travel Tracker
 
 A beginner-friendly full-stack **Travel Tracker** app where users can **sign up / log in** and **track visited countries**. Each user has their **own travel history**, stored securely in a **PostgreSQL** database, with visited countries highlighted on an interactive map ✨
@@ -22,112 +23,156 @@ A beginner-friendly full-stack **Travel Tracker** app where users can **sign up 
 ---
 
 ## 📁 Project Structure (typical)
-backend/
-server.js
-.env
-frontend/
-src/
-public/
 
-yaml
-Copy code
+```text
+backend/
+  server.js
+  .env
+frontend/
+  src/
+  public/
+````
 
 ---
 
 ## 📦 Prerequisites
+
 Make sure you have the following installed:
-- **Node.js** (with npm)
-- **PostgreSQL** running locally (default port `5432`)
+
+* **Node.js** (with npm)
+* **PostgreSQL** running locally (default port `5432`)
 
 ---
 
 ## 🗄 1) Database Setup (PostgreSQL)
 
 1. Create a database (example: `traveltracker`)
+
 2. Create the following tables:
-   - `users`
-   - `countries`
-   - `user_visited_countries`
+
+   * `users`
+   * `countries`
+   * `user_visited_countries`
 
 3. The `countries` table must include:
-   - `id` (primary key)
-   - `name` (e.g. `Nepal`)
-   - `code2` (e.g. `NP`)
+
+   * `id` (primary key)
+   * `name` (e.g. `Nepal`)
+   * `code2` (e.g. `NP`)
 
 👉 The backend links users and countries using:
-- `users.username`
-- `countries.name`
+
+* `users.username`
+* `countries.name`
 
 ---
 
 ## ⚙️ 2) Backend Setup
 
 ### Install dependencies
+
 ```bash
 cd backend
 npm install
-Create .env
-Inside the backend/ folder, create a .env file:
+```
 
-env
-Copy code
+### Create `.env`
+
+Inside the `backend/` folder, create a file named `.env`:
+
+```env
 DB_USER=your_postgres_user
 DB_HOST=localhost
 DB_NAME=your_database_name
 DB_PASSWORD=your_postgres_password
 DB_PORT=5432
-Run the backend
-bash
-Copy code
+```
+
+### Run the backend
+
+```bash
 npm start
+```
+
 Backend runs at:
 
-arduino
-Copy code
-http://localhost:5000
-💻 3) Frontend Setup
-Install dependencies
-bash
-Copy code
+* `http://localhost:5000`
+
+---
+
+## 💻 3) Frontend Setup
+
+### Install dependencies
+
+```bash
 cd frontend
 npm install
-Run the frontend
-bash
-Copy code
+```
+
+### Run the frontend
+
+```bash
 npm start
+```
+
 Frontend runs at:
 
-arduino
-Copy code
-http://localhost:3000
-🔌 API Endpoints
-Base URL: http://localhost:5000
+* `http://localhost:3000`
 
-POST /pwcheck
+---
 
-Body: { "username": "...", "password": "..." }
+## 🔌 API Endpoints
 
-Returns: true or false
+Base URL: `http://localhost:5000`
 
-POST /countries/visited
+### `POST /pwcheck`
 
-Body: { "username": "..." }
+**Body**
 
-Returns: [ { name, code2 } ]
+```json
+{ "username": "...", "password": "..." }
+```
 
-POST /countries/add
+**Returns:** `true` or `false`
 
-Body: { "username": "...", "countryName": "Nepal" }
+### `POST /countries/visited`
 
-Adds a visited country
+**Body**
 
-DELETE /countries/remove
+```json
+{ "username": "..." }
+```
 
-Body: { "username": "...", "countryName": "Nepal" }
+**Returns**
 
-Removes that country from the user’s list
+```json
+[ { "name": "Nepal", "code2": "NP" } ]
+```
 
-📝 Notes
-🚫 Do not commit your .env file — use .env.example instead
+### `POST /countries/add`
 
-🔄 After adding/removing countries, re-fetch visited countries to update the map and list
+**Body**
+
+```json
+{ "username": "...", "countryName": "Nepal" }
+```
+
+Adds a visited country.
+
+### `DELETE /countries/remove`
+
+**Body**
+
+```json
+{ "username": "...", "countryName": "Nepal" }
+```
+
+Removes that country from the user’s list.
+
+---
+
+## 📝 Notes
+
+* 🚫 Do not commit your `.env` file — use `.env.example` instead
+
+
