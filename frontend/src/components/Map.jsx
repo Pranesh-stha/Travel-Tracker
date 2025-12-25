@@ -1,6 +1,27 @@
 import React from "react";
 
 function Map() {
+  const [activeCountryIds, setActiveCountryIds] = React.useState(["FR", "NP", "RU"]);
+
+  function visited(countryId) {
+    setActiveCountryIds(prev => [...prev, countryId]);
+  }
+
+  
+
+
+  React.useEffect(() => {
+    visited("BR")
+    document
+      .querySelectorAll(".ag-canvas_svg path.is-active")
+      .forEach((p) => p.classList.remove("is-active"));
+
+    activeCountryIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("is-active");
+    });
+  }, [activeCountryIds]);
+
   return (
     <div className="map-container">
       <svg

@@ -11,13 +11,16 @@ import LoginPage from "./LoginPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [curretUser, steCurrentUser] = React.useState("Login")
 
-  function handleLogin() {
+  function handleLogin(loggedInUsername) {
+    steCurrentUser(loggedInUsername);
     setIsLoggedIn(true);
   }
 
   function handleLogout() {
     setIsLoggedIn(false);
+    steCurrentUser("Login");
   }
 
   function renderLoginPage() {
@@ -31,7 +34,7 @@ function App() {
     if (!isLoggedIn) {
       return <Redirect to="/login" />;
     }
-    return <Home onLogout={handleLogout} />;
+    return <Home onLogout={handleLogout} username = {curretUser}/>;
   }
 
   function renderRootRedirect() {

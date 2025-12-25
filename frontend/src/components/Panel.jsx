@@ -2,7 +2,17 @@ import React from "react";
 import Header from "./Header";
 import Login from "./Login";
 
-function Panel( {onLogout} ) {
+function Panel( {onLogout, username} ) {
+  const[userInput, setUserInput] = React.useState("")
+  function handleChange(event){
+    setUserInput(event.target.value)
+    
+  }
+
+  function handleClick(){
+    console.log(userInput)
+  }
+
   return (
     <div className="right-panel">
       <Header />
@@ -13,8 +23,10 @@ function Panel( {onLogout} ) {
           name="country"
           placeholder="Enter country name"
           autoFocus
+          value={userInput}
+          onChange={handleChange}
         />
-        <button type="submit">Add Country</button>
+        <button type="submit" onClick={handleClick}>Add Country</button>
       </div>
 
       <div className="country-list-section">
@@ -30,7 +42,7 @@ function Panel( {onLogout} ) {
         </ul>
       </div>
 
-      <Login onLogout={onLogout}/>
+      <Login onLogout={onLogout} username={username}/>
     </div>
   );
 }
