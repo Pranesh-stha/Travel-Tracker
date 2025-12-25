@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-function Map({ username, setFullNames}) {
+function Map({ username, setFullNames, refreshKey}) {
   const [activeCountryIds, setActiveCountryIds] = React.useState([]);
 
   async function visitedCountries() {
@@ -21,7 +21,7 @@ function Map({ username, setFullNames}) {
   
   React.useEffect(() => {
     visitedCountries();
-  }, []);
+  }, [refreshKey]);
 
   React.useEffect(() => {
     document

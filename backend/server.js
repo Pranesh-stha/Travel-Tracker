@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import pg from "pg";
 
+
 const app = express();
 const PORT = 5000;
 dotenv.config();
@@ -57,6 +58,27 @@ app.post("/pwcheck", (req, res) => {
 });
 
 
+app.post("/countries/add", async (req, res) => {
+  try {
+    const { username, countryName } = req.body;
+
+    await db.query(
+      `INSERT INTO user_visited_countries (user_id, country_id)
+       SELECT u.id, c.id
+       FROM users u, countries c
+       WHERE u.username = $1 AND c.name = $2
+       ON CONFLICT DO NOTHING`,
+      [username, countryName]
+    );
+
+    res.json({ message: "Country added successfully" });
+  } catch (err) {
+    console.error(err.stack);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+
 
 
 
@@ -91,6 +113,25 @@ app.post("/countries/visited", (req, res) => {
     }
   );
 });
+
+app.delete("/countries/remove", async (req, res) => {
+  try {
+    const { username, countryName } = req.body;
+
+    await db.query(
+      `DELETE FROM user_visited_countries
+       WHERE user_id = (SELECT id FROM users WHERE username = $1)
+         AND country_id = (SELECT id FROM countries WHERE name = $2)`,
+      [username, countryName]
+    );
+
+    res.json({ message: "Deleted successfully" });
+  } catch (err) {
+    console.error(err.stack);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 
 
 
